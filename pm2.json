@@ -1,0 +1,13 @@
+{
+    "apps": [{
+            "name": "xtransit",
+            "script": "./xtransit.js",
+            "exec_mode": "fork"
+        },
+        {
+            "name": "demo",
+            "script": "./app.js",
+            "instances": 1
+        }
+    ]
+}
