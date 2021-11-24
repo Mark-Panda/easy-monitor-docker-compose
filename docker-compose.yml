@@ -87,7 +87,7 @@ services:
       <<: *redis-environment
       <<: *mailer-environment
       XPROFILER_CONSOLE_URL: "http://xprofiler-console:8443"   # xtransit-manager 服务地址
-      TZ: Asia/Shanghai
+      TZ: Asia/Shanghai # 解决时区问题
 
   xtransit-server:
     container_name: xtransit-server
