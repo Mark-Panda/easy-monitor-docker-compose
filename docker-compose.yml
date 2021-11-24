@@ -5,12 +5,12 @@ x-mysql-environment: &mysql-environment
   XPROFILER_CONSOLE_MYSQL_HOST: "xtransit-mysql"              # xprofiler-console 数据库配置
   XPROFILER_CONSOLE_MYSQL_PORT: 3306
   XPROFILER_CONSOLE_MYSQL_USER: "root"
-  XPROFILER_CONSOLE_MYSQL_PASSWORD: "123456"
+  XPROFILER_CONSOLE_MYSQL_PASSWORD: "prisma"
   XPROFILER_CONSOLE_MYSQL_DATABASE: "xprofiler_console"   # xprofiler_console 数据库名称
   XPROFILER_LOGS_MYSQL_HOST: "xtransit-mysql"                 # xprofiler-logs 数据库配置
   XPROFILER_LOGS_MYSQL_PORT: 3306                         
   XPROFILER_LOGS_MYSQL_USER: "root"                       
-  XPROFILER_LOGS_MYSQL_PASSWORD: "123456"                 
+  XPROFILER_LOGS_MYSQL_PASSWORD: "prisma"                 
   XPROFILER_LOGS_MYSQL_DATABASE: "xprofiler_logs"         # xprofiler_logs 数据库名称
 
 # redis 公共配置
@@ -41,7 +41,7 @@ services:
       - "./db/xprofiler_logs/date.sql:/docker-entrypoint-initdb.d/3_date.sql"
       - "./mysql:/var/lib/mysql"   # 挂载数据目录
     environment: 
-      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_ROOT_PASSWORD: "prisma"
       MYSQL_ROOT_HOST: "%"
   
   xtransit-redis:
@@ -69,7 +69,7 @@ services:
       <<: *redis-environment
       XPROFILER_CONSOLE_URL: "http://127.0.0.1:8443"   # xprofiler-console 服务地址，这里最好配置服务器地址，要不然在界面操作 文件-》转储 时会失败
       XTRANSIT_MANAGER_URL: http://xtransit-manager:8543       # xtransit-manager 服务地址，也可以填服务器ip
-
+      TZ: Asia/Shanghai
   xtransit-manager:
     container_name: xtransit-manager
     image: dq198/xtransit-manager:v1.0.1
@@ -87,6 +87,7 @@ services:
       <<: *redis-environment
       <<: *mailer-environment
       XPROFILER_CONSOLE_URL: "http://xprofiler-console:8443"   # xtransit-manager 服务地址
+      TZ: Asia/Shanghai
 
   xtransit-server:
     container_name: xtransit-server
@@ -96,12 +97,13 @@ services:
     # cpus: 1
     # mem_limit: 200m
     ports: 
-      - 9090:9090
+      - 0.0.0.0:9090:9090
     depends_on:
       - xtransit-mysql
       - xtransit-redis
     environment: 
       XTRANSIT_MANAGER_URL: http://xtransit-manager:8543      # xtransit-manager 服务地址
+      TZ: Asia/Shanghai
 
 # 可以不用配置 networks，也可以自行创建配置
 # networks:
